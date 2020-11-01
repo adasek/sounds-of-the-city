@@ -19,9 +19,9 @@ export default class ServerRequest {
 
             req.on('end', function () {
                 let resultObject = _this.parseRequest(JSON.parse(body));
-                if (!('error' in resultObject)){
+                if (!('error' in resultObject)) {
                     resultObject['status'] = "ok";
-                }else{
+                } else {
                     resultObject['status'] = "error";
                 }
                 res.end(JSON.stringify(resultObject));
@@ -32,17 +32,17 @@ export default class ServerRequest {
             res.end();
             req.destroy();
         } else {
-            res.end(JSON.stringify({"error":"bad http method"}));
+            res.end(JSON.stringify({"error": "bad http method"}));
             req.destroy();
         }
     }
 
     parseRequest(requestBody) {
         var lat, lon;
-        if(!('longitude' in requestBody) || isNaN(lon = parseFloat(requestBody['longitude']))){
+        if (!('longitude' in requestBody) || isNaN(lon = parseFloat(requestBody['longitude']))) {
             return {'error': 'Parameter longitude missing/unparsable'}
         }
-        if(!('latitude' in requestBody) || isNaN(lat = parseFloat(requestBody['latitude']))){
+        if (!('latitude' in requestBody) || isNaN(lat = parseFloat(requestBody['latitude']))) {
             return {'error': 'Parameter latitude missing/unparsable'}
         }
 

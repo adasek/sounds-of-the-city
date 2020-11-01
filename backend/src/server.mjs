@@ -1,14 +1,15 @@
-import pkg from 'pg';
-const { Pool, Client } = pkg;
+import pg from 'pg';
+
+const {Pool, Client} = pg;
 
 export default class Server {
 
     constructor() {
         //instance the database connection
-                this.databasePool = new Pool();
+        this.databasePool = new Pool();
     }
 
-    async databaseQuery(queryString){
+    async databaseQuery(queryString) {
         return this.databasePool.query('SELECT NOW()');
     }
 

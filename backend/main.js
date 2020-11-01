@@ -12,10 +12,10 @@ http.createServer(function (req, res) {
 }).listen(8080);
 
 
-process.on('beforeExit',  async function(code){
+process.on('beforeExit', async function (code) {
     await server.finalize();
 });
 
-process.on('exit',  async function(code){
-    console.log("Exited with code "+code)
+process.on('exit', async function (code) {
+    console.log("Exited with code " + code)
 });

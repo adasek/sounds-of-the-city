@@ -10,6 +10,7 @@
   "author": "Adam Benda<bendaad1@fit.cvut.cz>",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "pg": "^8.4.2",
     "pg-native": "^3.0.0"
   }

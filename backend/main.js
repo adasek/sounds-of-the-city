@@ -1,7 +1,9 @@
 import Server from './src/server.mjs'
 import ServerRequest from './src/server_request.mjs'
 import * as http from 'http';
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 
 let server = new Server();
 

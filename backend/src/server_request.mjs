@@ -17,8 +17,8 @@ export default class ServerRequest {
                 }
             });
 
-            req.on('end', function () {
-                let resultObject = _this.parseRequest(JSON.parse(body));
+            req.on('end', async function () {
+                let resultObject = await _this.parseRequest(JSON.parse(body));
                 if (!('error' in resultObject)) {
                     resultObject['status'] = "ok";
                 } else {
@@ -37,17 +37,40 @@ export default class ServerRequest {
         }
     }
 
-    parseRequest(requestBody) {
-        var lat, lon;
+    async parseRequest(requestBody) {
+        var lat, lon, distance;
         if (!('longitude' in requestBody) || isNaN(lon = parseFloat(requestBody['longitude']))) {
             return {'error': 'Parameter longitude missing/unparsable'}
         }
         if (!('latitude' in requestBody) || isNaN(lat = parseFloat(requestBody['latitude']))) {
             return {'error': 'Parameter latitude missing/unparsable'}
         }
+        if('distance' in requestBody){
+            // distance in meters
+            distance = parseInt(requestBody['distance']);
+        }
 
-        let result = {}
-        return result
+        return this.getFeaturesAround(lat, lon, distance)
     }
 
+    async getFeaturesAround(lat, lon, distance = 100){
+    let queryString = `
+     WITH 
+leftTopCorner(p) as (SELECT ST_Project('POINT(${lon} ${lat})'::geography::geometry, sqrt(${distance}*2), radians(315.0))::geometry as p), 
+rightBottomCorner(p) as  (SELECT ST_Project('POINT(${lon} ${lat})'::geography::geometry, sqrt(${distance}*2), radians(45.0))::geometry as p)
+SELECT ctvuk_kod, ctvuk_popis, ST_AsText(ST_UNION(wkb_geometry) AS geometry)
+ FROM technicke_vyuziti
+ WHERE  wkb_geometry 
+     && 
+     ST_MakeEnvelope (
+         (SELECT ST_X((select p from leftTopCorner))),
+         (SELECT ST_Y((select p from leftTopCorner))),
+         (SELECT ST_X((select p from rightBottomCorner))),
+         (SELECT ST_Y((select p from rightBottomCorner)))
+         )
+     group by ctvuk_kod,ctvuk_popis
+     `;
+    let result = await this.server.query(queryString);
+    return {'technical_usages': result.rows}
+    }
 };

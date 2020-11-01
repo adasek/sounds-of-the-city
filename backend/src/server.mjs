@@ -9,8 +9,8 @@ export default class Server {
         this.databasePool = new Pool();
     }
 
-    async databaseQuery(queryString) {
-        return this.databasePool.query('SELECT NOW()');
+    async query(queryString) {
+        return this.databasePool.query(queryString);
     }
 
     async finalize() {

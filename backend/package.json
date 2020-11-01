@@ -1,0 +1,16 @@
+{
+  "name": "sounds-of-prague-backend",
+  "version": "1.0.0",
+  "description": "Provider of geospatial data for Sounds of Prague project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "author": "Adam Benda<bendaad1@fit.cvut.cz>",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.4.2",
+    "pg-native": "^3.0.0"
+  }
+}

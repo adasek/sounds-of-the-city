@@ -6,10 +6,20 @@ import {Avatar} from './jsm/avatar/Avatar.js';
 //import { Terrain } from './jsm/terrain/terrain.js';
 const area = require('../area.json')
 
-let camera, controls, scene, renderer, avatar, time, listener;
+let button, camera, controls, scene, renderer, avatar, time, listener;
 
-init();
-animate();
+
+function doPlay(){
+    button.style.display = 'none'
+    init();
+    animate();
+}
+
+button = document.createElement("button")
+button.innerHTML = "Start"
+button.onclick=doPlay
+document.body.appendChild(button)
+
 
 function parseGeometry(geometry) {
     //input: POINT(14.322079278 50.0925608060001)
@@ -74,7 +84,7 @@ function init() {
             table: "pid_stops",
             geometry: new THREE.CylinderBufferGeometry(0, 10, 30, 4, 1),
             material: new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true}),
-            soundSrc: 'sounds/213564__woodylein__at-a-bus-stop.wav'
+            soundSrc: 'sounds/213564__woodylein__at-a-bus-stop.mp3'
         },
         {
             table: "culture_venues",

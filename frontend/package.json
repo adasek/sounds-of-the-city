@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "webpack",
-    "start": "webpack serve"
+    "start": "webpack serve",
+    "upload-test": "rsync -r dist/ root@adasek.cz:/var/www/adasek.cz/sounds_of_city; rsync -r assets/* root@adasek.cz:/var/www/adasek.cz/sounds_of_city/"
   },
   "dependencies": {
     "three": "^0.123.0"

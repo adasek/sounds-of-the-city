@@ -48,3 +48,9 @@ ogr2ogr -f "PostgreSQL" PG:"dbname=$DATABASE_NAME user=$DATABASE_USER password=$
 #ogr2ogr -f "PostgreSQL" PG:"dbname=$DATABASE_NAME user=$DATABASE_USER password=$DATABASE_PASSWORD" \
 #  "data/technicke_vyuziti/TMTVU_P.gml" -nln technicke_vyuziti -progress -overwrite
 
+# PID stops
+ogr2ogr -f "PostgreSQL" PG:"dbname=$DATABASE_NAME user=$DATABASE_USER password=$DATABASE_PASSWORD" \
+  "data/pid_zastavky/DOP_PID_ZASTAVKY_TS_B.json" -nln pid_zastavky -progress -overwrite
+
+
+

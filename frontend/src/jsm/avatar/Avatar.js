@@ -13,6 +13,7 @@ var Avatar = function ( scene, domElement ) {
     this.domElement = domElement;
 
     this.up = new Vector3(0,1,0)
+    this.forwardVector = new Vector3(0,1,0)
     this.directionAngle = 0
     this.speedPerMs = 0.05 // per ms
     this.rotateSpeed = 0.005 // rad per ms
@@ -56,6 +57,11 @@ var Avatar = function ( scene, domElement ) {
                 this.directionAngle +=  this.rotateSpeed  * timeElapsed
                 this.object.rotation.y = this.directionAngle;
             }
+
+
+            this.forwardVector.x = this.object.position.x +  Math.sin(this.directionAngle)
+            this.forwardVector.y = this.object.position.y
+            this.forwardVector.z = this.object.position.z +  Math.sin(this.directionAngle)
 
             this.object.updateMatrix();
             return originalPosition.sub(this.object.position);

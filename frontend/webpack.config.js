@@ -30,7 +30,7 @@ module.exports = {
       new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin()],
   devServer: {
-    contentBase: './dist',
+    contentBase: ['dist', 'assets']
   },
   module: {
     rules: [{

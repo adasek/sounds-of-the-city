@@ -6,7 +6,7 @@ import {Avatar} from './jsm/avatar/Avatar.js';
 //import { Terrain } from './jsm/terrain/terrain.js';
 const area = require('../area.json')
 
-let camera, controls, scene, renderer, avatar, time;
+let camera, controls, scene, renderer, avatar, time, listener;
 
 init();
 animate();
@@ -32,6 +32,18 @@ function init() {
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.set(400, 200, 0);
 
+    // Audio
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+    listener = audioCtx.listener;
+    const pannerModel = 'HRTF';
+    const innerCone = 360;
+    const outerCone = 360;
+    const outerGain = 0.3;
+    const distanceModel = 'linear';
+    const maxDistance = 10000;
+    const refDistance = 1;
+    const rollOff = 10;
 
     // controls
 
@@ -61,7 +73,8 @@ function init() {
         {
             table: "pid_stops",
             geometry: new THREE.CylinderBufferGeometry(0, 10, 30, 4, 1),
-            material: new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true})
+            material: new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true}),
+            soundSrc: 'sounds/213564__woodylein__at-a-bus-stop.wav'
         },
         {
             table: "culture_venues",
@@ -104,6 +117,33 @@ function init() {
                 mesh.updateMatrix();
                 mesh.matrixAutoUpdate = false;
                 scene.add(mesh);
+
+                if(pointTable.soundSrc){
+
+                    const panner = new PannerNode(audioCtx, {
+                        panningModel: pannerModel,
+                        distanceModel: distanceModel,
+                        positionX: mesh.position.x,
+                        positionY: mesh.position.y,
+                        positionZ: mesh.position.z,
+                        orientationX: 0,
+                        orientationY: 1,
+                        orientationZ: 0,
+                        refDistance: refDistance,
+                        maxDistance: maxDistance,
+                        rolloffFactor: rollOff,
+                        coneInnerAngle: innerCone,
+                        coneOuterAngle: outerCone,
+                        coneOuterGain: outerGain
+                    })
+
+                    const audioElement = document.createElement('audio')
+                    audioElement.src = pointTable.soundSrc
+                    audioElement.play()
+                    const track = audioCtx.createMediaElementSource(audioElement);
+                    track.connect(panner).connect(audioCtx.destination);
+                }
+
             }
         }
     )
@@ -156,6 +196,18 @@ function animate() {
     controls.object.position.x -= positionDiff.x
     controls.object.position.y -= positionDiff.y
     controls.object.position.z -= positionDiff.z
+
+    //audio
+    listener.positionX.value = avatar.object.position.x;
+    listener.positionY.value = avatar.object.position.y;
+    listener.positionZ.value = avatar.object.position.z;
+
+    listener.forwardX.value = avatar.forwardVector.x;
+    listener.forwardY.value = avatar.forwardVector.y;
+    listener.forwardZ.value = avatar.forwardVector.z;
+    listener.upX.value = avatar.up.x;
+    listener.upY.value = avatar.up.y;
+    listener.upZ.value = avatar.up.z;
 
     render();
 

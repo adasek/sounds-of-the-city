@@ -28,7 +28,42 @@ module.exports = {
   mode: 'development',
   plugins: [
       new webpack.ProgressPlugin(),
-    new HtmlWebpackPlugin()],
+    new HtmlWebpackPlugin({
+      inject: false,
+      template: require('html-webpack-template'),
+
+      headHtmlSnippet: '<style>body {margin: 0}</style>',
+      meta: [
+        {
+          name: 'description',
+          content: 'Sounds of Prague project for CCC on FIT CTU in Prague'
+        }
+      ],
+      mobile: true,
+      lang: 'en-US',
+      links: [
+        'https://fonts.googleapis.com/css?family=Roboto',
+        {
+          href: '/apple-touch-icon.png',
+          rel: 'apple-touch-icon',
+          sizes: '180x180'
+        },
+        {
+          href: '/favicon-32x32.png',
+          rel: 'icon',
+          sizes: '32x32',
+          type: 'image/png'
+        }
+      ],
+      inlineManifestWebpackName: 'webpackManifest',
+      scripts: [
+        {
+          src: '/main.js',
+          type: 'module'
+        }
+      ],
+      title: 'Sounds of Prague'
+    })],
   devServer: {
     contentBase: ['dist', 'assets']
   },

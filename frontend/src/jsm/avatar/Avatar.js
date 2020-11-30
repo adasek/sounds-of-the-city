@@ -1,10 +1,5 @@
 import {
     EventDispatcher,
-    MOUSE,
-    Quaternion,
-    Spherical,
-    TOUCH,
-    Vector2,
     Vector3
 } from "three";
 import * as THREE from "three";
@@ -57,7 +52,6 @@ var Avatar = function ( scene, domElement ) {
                 this.directionAngle +=  this.rotateSpeed  * timeElapsed
                 this.object.rotation.y = this.directionAngle;
             }
-
 
             this.forwardVector.x = this.object.position.x +  Math.sin(this.directionAngle)
             this.forwardVector.y = this.object.position.y

@@ -58,7 +58,7 @@ module.exports = {
       inlineManifestWebpackName: 'webpackManifest',
       scripts: [
         {
-          src: '/main.js',
+          src: 'main.js',
           type: 'module'
         }
       ],

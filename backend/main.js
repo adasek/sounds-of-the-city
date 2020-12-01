@@ -8,8 +8,11 @@ dotenv.config();
 let server = new Server();
 
 http.createServer(function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+    res.setHeader("Access-Control-Allow-Headers", "*");
+
     return new ServerRequest(server, req, res)
-}).listen(8090);
+}).listen(process.env.PORT || 8090);
 
 
 process.on('beforeExit', async function (code) {

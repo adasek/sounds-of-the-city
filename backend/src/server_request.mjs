@@ -24,16 +24,14 @@ export default class ServerRequest {
                 } else {
                     resultObject['status'] = "error";
                 }
-                res.end(JSON.stringify(resultObject));
-                req.destroy();
+                res.write(JSON.stringify(resultObject));
+                res.end();
             });
         } else if (req.method == "HEAD") {
             // Preflight request
             res.end();
-            req.destroy();
         } else {
             res.end(JSON.stringify({"error": "bad http method"}));
-            req.destroy();
         }
     }
 
@@ -49,7 +47,9 @@ export default class ServerRequest {
             // distance in meters
             distance = parseInt(requestBody['distance']);
         }
-
+        if(!distance || distance > 200){
+            distance = 200
+        }
         return this.getFeaturesAround(lat, lon, distance)
     }
 
@@ -99,7 +99,7 @@ rightBottomCorner(p) as  (SELECT ST_Project('POINT(${lon} ${lat})'::geography::g
         return result.rows
     }
 
-    async getFeaturesAround(lat, lon, distance = 500) {
+    async getFeaturesAround(lat, lon, distance = 100) {
         //
         return {
             'technical_usage': await this.getTechnicalUsage(lat, lon, distance),

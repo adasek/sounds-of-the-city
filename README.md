@@ -4,12 +4,9 @@
 ```bash
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
-echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg-testing main 13" |sudo tee  /etc/apt/sources.list.d/pgdg-testing.list
+echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg-testing main 12" |sudo tee  /etc/apt/sources.list.d/pgdg-testing.list
 
-sudo apt-get install postgis postgresql-12-postgis-3
-sudo apt-get install postgresql-12-postgis-3-scripts
-
-sudo apt-get install gdal-bin
+sudo apt-get install postgis postgresql-12-postgis-3 postgresql-12-postgis-3-scripts gdal-bin
 
 # Enter the postgres shell
 # (maybe you'll have to create a postgres user first) 

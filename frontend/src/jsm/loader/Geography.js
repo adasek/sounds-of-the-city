@@ -4,12 +4,13 @@ Acquiring geo features around given location
 */
 import { EventDispatcher } from "three";
 
-const tmp_area = require('../../../area.json')
+const axios = require('axios').default;
 
 var GeographyLoader = function ( lat, lon ) {
     this.lat = null
     this.lon = null
     this.geoData = {}
+    this.isUpdating = false
 
     this.calculateDistance = function(pointA, pointB){
         function deg2rad(deg) {
@@ -30,16 +31,27 @@ var GeographyLoader = function ( lat, lon ) {
     }
 
     this.updateCoordinates = function(lat, lon){
-        if (!this.lon || !this.lat || this.calculateDistance({lat: lat, lon: lon}, {lat: this.lat, lon: this.lon}) > 100){
+        if (!this.isUpdating && (!this.lon || !this.lat || this.calculateDistance({lat: lat, lon: lon}, {lat: this.lat, lon: this.lon}) > 0.1)){
             // fetch data
-            this.geoData = tmp_area
-
-            //todo: with callback
-            setTimeout(function(){
-                this.dispatchEvent( { type: 'geoDataLoaded', geoData: this.geoData } );
-                this.lat = lat
-                this.lon = lon
-            }.bind(this),0)
+            console.log("updateCoordinates")
+            this.isUpdating = true
+            let requestData = {
+                longitude: lon,
+                latitude: lat
+            }
+            axios.post('http://localhost:8090/', requestData)
+                .then(function (response) {
+                    if(response.data.error){ throw response.data.error }
+                    this.geoData = response.data
+                    this.dispatchEvent( { type: 'geoDataLoaded', geoData: this.geoData, center: {lat: lat, lon: lon} } );
+                    this.lat = lat
+                    this.lon = lon
+                    this.isUpdating = false
+                }.bind(this))
+                .catch(function (error) {
+                    this.isUpdating = false
+                    console.log(error);
+                }.bind(this));
         }
     }
 

@@ -12,7 +12,7 @@ var World = function (controls, scene, domElement) {
     this.scene = scene
     this.avatar = new Avatar(scene, domElement)
     this.objects = []
-    this.center = {lat: 50.092656, lon: 14.3225442}
+    this.center = {lat: null, lon: null}
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioCtx = new AudioContext();
@@ -73,7 +73,22 @@ var World = function (controls, scene, domElement) {
         return {lon: parseFloat(pos[1]), lat: parseFloat(pos[2])}
     }
 
-    this.updateGeoData = function (geoData) {
+    this.updateGeoData = function (geoData, centerPoint) {
+        this.center.lat = centerPoint.lat
+        this.center.lon = centerPoint.lon
+        // update avatar position
+        this.avatar.object.position.x = 0
+        this.avatar.object.position.y = 0
+        this.avatar.object.position.z = 0
+        //delete objects
+        this.audioCtx.close();
+        this.audioCtx = new AudioContext();
+        this.listener = this.audioCtx.listener;
+
+        this.objects.forEach((object)=>{
+            this.scene.remove(object.mesh);
+        })
+
         // load new objects
         for (let objectType in geoData) {
             //geoData[objectType]
@@ -127,8 +142,10 @@ var World = function (controls, scene, domElement) {
 
     this.update = function () {
         return function update(timeElapsed) {
-
             let positionDiff = this.avatar.update(timeElapsed);
+
+            this.dispatchEvent( { type: 'positionUpdate', position: this.avatar.getGPSPosition(this.center) } );
+
 
             this.controls.target.x = this.avatar.object.position.x
             this.controls.target.y = this.avatar.object.position.y

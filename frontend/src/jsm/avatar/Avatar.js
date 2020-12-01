@@ -28,6 +28,13 @@ var Avatar = function ( scene, domElement ) {
     // Controls
     this.keyTable = {left: false, right: false, forward: false, backward: false}
 
+    this.getGPSPosition = function(centerGPS){
+        return {
+            lat: this.object.position.x / 100000 + centerGPS.lat,
+            lon: this.object.position.z / 100000 + centerGPS.lon
+        }
+    }
+
     this.update = function () {
 
         return function update(timeElapsed) {

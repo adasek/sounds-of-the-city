@@ -12,10 +12,16 @@ function doPlay(){
     button.style.display = 'none'
     init();
 
-    geographyLoader = new GeographyLoader()
+    // Vaclavak
+    geographyLoader = new GeographyLoader( 50.0796064, 14.4300247)
+    // div sarka
+    //geographyLoader = new GeographyLoader( 50.0926997, 14.3240239)
+
     geographyLoader.addEventListener( 'geoDataLoaded', function ( event ) {
-        world.updateGeoData(event.geoData)
+        world.updateGeoData(event.geoData, event.center)
     } );
+
+
 
     animate();
 }
@@ -42,6 +48,11 @@ function init() {
     scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
 
     world = new World(controls, scene, renderer.domElement)
+
+    world.addEventListener( 'positionUpdate', function ( event ) {
+        geographyLoader.updateCoordinates(event.position.lat, event.position.lon)
+    } );
+
 
 
     //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)

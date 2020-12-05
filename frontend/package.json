@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.21.0",
+    "deepmerge": "^4.2.2",
     "three": "^0.123.0"
   },
   "devDependencies": {

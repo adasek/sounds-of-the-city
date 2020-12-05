@@ -13,9 +13,9 @@ function doPlay(){
     init();
 
     // Vaclavak
-    geographyLoader = new GeographyLoader( 50.0796064, 14.4300247)
+    //geographyLoader = new GeographyLoader( 50.0796064, 14.4300247)
     // div sarka
-    //geographyLoader = new GeographyLoader( 50.0926997, 14.3240239)
+    geographyLoader = new GeographyLoader( 50.0926997, 14.3240239)
 
     geographyLoader.addEventListener( 'geoDataLoaded', function ( event ) {
         world.updateGeoData(event.geoData, event.center)

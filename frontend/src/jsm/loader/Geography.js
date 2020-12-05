@@ -33,7 +33,6 @@ var GeographyLoader = function ( lat, lon ) {
     this.updateCoordinates = function(lat, lon){
         if (!this.isUpdating && (!this.lon || !this.lat || this.calculateDistance({lat: lat, lon: lon}, {lat: this.lat, lon: this.lon}) > 0.1)){
             // fetch data
-            console.log("updateCoordinates")
             this.isUpdating = true
             let requestData = {
                 longitude: lon,

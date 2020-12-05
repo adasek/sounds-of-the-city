@@ -3,7 +3,7 @@ import {
     Vector3
 } from "three";
 import {Avatar} from '../avatar/Avatar.js';
-
+import {GeoObjectFactory} from './GeoObjectFactory.js';
 
 import * as THREE from "three";
 
@@ -11,67 +11,13 @@ var World = function (controls, scene, domElement) {
     this.controls = controls
     this.scene = scene
     this.avatar = new Avatar(scene, domElement)
-    this.objects = []
+    this.objects = {}
     this.center = {lat: null, lon: null}
+    this.geoObjectFactory = new GeoObjectFactory()
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioCtx = new AudioContext();
     this.listener = this.audioCtx.listener;
-
-    // Audio
-    const pannerModel = 'HRTF';
-    const innerCone = 360;
-    const outerCone = 360;
-    const outerGain = 0.3;
-    const distanceModel = 'linear';
-    const maxDistance = 10000;
-    const refDistance = 1;
-    const rollOff = 10;
-
-    this.pointTables = {
-        "pid_stops": {
-            table: "pid_stops",
-            geometry: new THREE.CylinderBufferGeometry(0, 10, 30, 4, 1),
-            material: new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true}),
-            soundSrc: 'sounds/213564__woodylein__at-a-bus-stop.mp3'
-        },
-        "culture_venues": {
-            table: "culture_venues",
-            geometry: new THREE.CylinderBufferGeometry(5, 10, 30, 5, 1),
-            material: new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true})
-        },
-        "trash_wc": {
-            table: "trash_wc",
-            geometry: new THREE.CylinderBufferGeometry(5, 5, 30, 5, 1),
-            material: new THREE.MeshPhongMaterial({color: 0x666666, flatShading: true})
-        },
-        "trash_containers": {
-            table: "trash_containers",
-            geometry: new THREE.CylinderBufferGeometry(10, 10, 30, 5, 1),
-            material: new THREE.MeshPhongMaterial({color: 0x666666, flatShading: true})
-        },
-        "trash_centers": {
-            table: "trash_centers",
-            geometry: new THREE.CylinderBufferGeometry(5, 10, 30, 5, 1),
-            material: new THREE.MeshPhongMaterial({color: 0x666666, flatShading: true})
-        },
-        "police": {
-            table: "police",
-            geometry: new THREE.CylinderBufferGeometry(10, 5, 30, 10, 1),
-            material: new THREE.MeshPhongMaterial({color: 0x0000ff, flatShading: true})
-        },
-        "nature_memorial_trees": {
-            table: "nature_memorial_trees",
-            geometry: new THREE.CylinderBufferGeometry(10, 5, 30, 12, 1),
-            material: new THREE.MeshPhongMaterial({color: 0x00ff00, flatShading: true})
-        }
-    }
-
-    this.parseGeometry = function (geometry) {
-        //input: POINT(14.322079278 50.0925608060001)
-        let pos = geometry.match(/POINT\(([0-9.]*) ([0-9.]*)/i);
-        return {lon: parseFloat(pos[1]), lat: parseFloat(pos[2])}
-    }
 
     this.updateGeoData = function (geoData, centerPoint) {
         this.center.lat = centerPoint.lat
@@ -85,58 +31,22 @@ var World = function (controls, scene, domElement) {
         this.audioCtx = new AudioContext();
         this.listener = this.audioCtx.listener;
 
-        this.objects.forEach((object)=>{
-            this.scene.remove(object.mesh);
-        })
-
         // load new objects
         for (let objectType in geoData) {
             //geoData[objectType]
-            if (!this.pointTables[objectType]) {
-                continue
+            if (!Array.isArray(geoData[objectType])) {
+                continue;
             }
-            let pointTable = this.pointTables[objectType]
-
-            geoData[objectType].forEach((geoItem) => {
-                    const mesh = new THREE.Mesh(pointTable.geometry, pointTable.material);
-                    let point = this.parseGeometry(geoItem.geometry)
-                    mesh.position.x = (point.lat - this.center.lat) * 100000;
-                    mesh.position.y = 0;
-                    mesh.position.z = (point.lon - this.center.lon) * 100000;
-                    mesh.updateMatrix();
-                    mesh.matrixAutoUpdate = false;
-                    this.scene.add(mesh);
-
-
-                    const panner = new PannerNode(this.audioCtx, {
-                        panningModel: pannerModel,
-                        distanceModel: distanceModel,
-                        positionX: mesh.position.x,
-                        positionY: mesh.position.y,
-                        positionZ: mesh.position.z,
-                        orientationX: 0,
-                        orientationY: 1,
-                        orientationZ: 0,
-                        refDistance: refDistance,
-                        maxDistance: maxDistance,
-                        rolloffFactor: rollOff,
-                        coneInnerAngle: innerCone,
-                        coneOuterAngle: outerCone,
-                        coneOuterGain: outerGain
-                    })
-                    if (pointTable.soundSrc) {
-                        const audioElement = document.createElement('audio')
-                        audioElement.src = pointTable.soundSrc
-                        audioElement.play()
-                        const track = this.audioCtx.createMediaElementSource(audioElement);
-                        track.connect(panner).connect(this.audioCtx.destination);
-                    }
-                    this.objects.push({
-                        mesh: mesh,
-                        panner: panner
-                    })
+            for (let geoItem of geoData[objectType]) {
+                let newObject = this.geoObjectFactory.build(geoItem, this.center, this.scene, this.audioCtx)
+                if (!newObject) {
+                    continue;
                 }
-            )
+                if (newObject.hash() in this.objects) {
+                    throw "Duplicate object hash " + newObject.hash()
+                }
+                this.objects[newObject.hash()] = newObject
+            }
         }
     }
 
@@ -144,7 +54,7 @@ var World = function (controls, scene, domElement) {
         return function update(timeElapsed) {
             let positionDiff = this.avatar.update(timeElapsed);
 
-            this.dispatchEvent( { type: 'positionUpdate', position: this.avatar.getGPSPosition(this.center) } );
+            this.dispatchEvent({type: 'positionUpdate', position: this.avatar.getGPSPosition(this.center)});
 
 
             this.controls.target.x = this.avatar.object.position.x

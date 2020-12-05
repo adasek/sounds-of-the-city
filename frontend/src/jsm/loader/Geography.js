@@ -3,6 +3,7 @@ Component for communicating with server:
 Acquiring geo features around given location
 */
 import { EventDispatcher } from "three";
+import { GeographyHelper } from "../helper/Geography.js";
 
 const axios = require('axios').default;
 
@@ -12,26 +13,8 @@ var GeographyLoader = function ( lat, lon ) {
     this.geoData = {}
     this.isUpdating = false
 
-    this.calculateDistance = function(pointA, pointB){
-        function deg2rad(deg) {
-            return deg * (Math.PI/180)
-        }
-
-        var R = 6371;
-            var dLat = deg2rad(pointB.lat-pointA.lat);
-            var dLon = deg2rad(pointB.lon-pointA.lon);
-            var a =
-                Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(deg2rad(pointA.lat)) * Math.cos(deg2rad(pointB.lat)) *
-                Math.sin(dLon/2) * Math.sin(dLon/2)
-            ;
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            var d = R * c;
-            return d;
-    }
-
     this.updateCoordinates = function(lat, lon){
-        if (!this.isUpdating && (!this.lon || !this.lat || this.calculateDistance({lat: lat, lon: lon}, {lat: this.lat, lon: this.lon}) > 0.1)){
+        if (!this.isUpdating && (!this.lon || !this.lat || GeographyHelper.calculateDistance({lat: lat, lon: lon}, {lat: this.lat, lon: this.lon}) > 0.1)){
             // fetch data
             this.isUpdating = true
             let requestData = {

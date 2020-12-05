@@ -22,11 +22,11 @@ var GeoObject = function (geoItem, opts) {
             'pannerModel': 'HRTF',
             'innerCone ': 360,
             'outerCone': 360,
-            'outerGain': 0.3,
-            'distanceModel': 'linear',
-            'maxDistance': 10000,
+            'outerGain': 0,
+            'distanceModel': 'inverse',
+            'maxDistance': 0.1,
             'refDistance': 1,
-            'rollOff': 10,
+            'rolloffFactor': 1,
         },
         gfx: {
             geometry: {class: 'CylinderBufferGeometry', params: [5, 5, 30, 5, 1]},
@@ -34,6 +34,7 @@ var GeoObject = function (geoItem, opts) {
         }
     }
     this.opts = merge(this.opts, opts, { arrayMerge: overwriteMerge })
+
 
     this.parseGeometry = function (geometry) {
         //input: POINT(14.322079278 50.0925608060001)
@@ -45,6 +46,8 @@ var GeoObject = function (geoItem, opts) {
     }
 
     this.attachToScene = function (scene, centerPoint) {
+        // Save scene for destroy this later
+        this.scene = scene
         if (!this.opts.gfx.geometry || !this.opts.gfx.material) {
             throw "Unknown geometry/material"
         }
@@ -68,6 +71,8 @@ var GeoObject = function (geoItem, opts) {
     }
 
     this.attachToAudioModel = function (audioContext, centerPoint) {
+        // Save audioContext for destroying this
+        this.audioContext = audioContext
         let point = this.geometryCenter()
         this.panner = new PannerNode(audioContext, merge(this.opts.audio, {
                 positionX: (point.lat - centerPoint.lat) * 100000,
@@ -90,6 +95,22 @@ var GeoObject = function (geoItem, opts) {
 
     this.hash = function(){
         return this.type + "_" + this.id
+    }
+
+    this.destroy = function(){
+        if(this.destroyed){
+            throw "Destroyed called multiple time"
+        }
+        if (this.opts.audio.src) {
+            this.audioElement.pause()
+            //this.audioTrack.disconnect(this.panner);
+            //this.panner.disconnect(this.audioContext.destination)
+            if(this.audioElement.parentNode){
+                this.audioElement.parentNode.removeChild(this.audioElement);
+            }
+        }
+        this.destroyed = true
+        this.scene.remove(this.mesh);
     }
 }
 

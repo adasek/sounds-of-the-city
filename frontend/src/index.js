@@ -25,8 +25,6 @@ function doPlay(){
         world.updateGeoData(event.geoData, event.center)
     } );
 
-
-
     animate();
 }
 
@@ -56,8 +54,6 @@ function init() {
     world.addEventListener( 'positionUpdate', function ( event ) {
         geographyLoader.updateCoordinates(event.position.lat, event.position.lon)
     } );
-
-
 
     //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
 

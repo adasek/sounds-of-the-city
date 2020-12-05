@@ -5,7 +5,9 @@ import {
 import {Avatar} from '../avatar/Avatar.js';
 import {GeoObjectFactory} from './GeoObjectFactory.js';
 
+
 import * as THREE from "three";
+import {GeographyHelper} from "../helper/Geography";
 
 var World = function (controls, scene, domElement) {
     this.controls = controls
@@ -27,6 +29,14 @@ var World = function (controls, scene, domElement) {
         //this.avatar.object.position.y = 0
         //this.avatar.object.position.z = 0
 
+        // cleanup
+        for (let key in this.objects) {
+            if(GeographyHelper.calculateDistance(this.avatar.getGPSPosition(this.center), this.objects[key].geometryCenter() ) > 0.3 ) {
+                this.objects[key].destroy()
+                delete(this.objects[key])
+            }
+        }
+
         // load new objects
         for (let objectType in geoData) {
             //geoData[objectType]
@@ -47,6 +57,8 @@ var World = function (controls, scene, domElement) {
                 this.objects[newObject.hash()] = newObject
             }
         }
+
+
     }
 
     this.update = function () {

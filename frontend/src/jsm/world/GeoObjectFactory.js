@@ -29,12 +29,18 @@ var GeoObjectFactory = function (controls, scene, domElement) {
             gfx: {
                 geometry: {class: 'CylinderBufferGeometry', params: [10, 10, 30, 5, 1]},
                 material: {class: 'MeshPhongMaterial', params: [{color: 0x666666, flatShading: true}]}
+            },
+            audio: {
+                src: 'sounds/214854__bash360__crumbling-paper.mp3'
             }
         },
         "odpad_sber": {
             gfx: {
                 geometry: {class: 'CylinderBufferGeometry', params: [5, 10, 30, 5, 1]},
                 material: {class: 'MeshPhongMaterial', params: [{color: 0x666666, flatShading: true}]}
+            },
+            audio: {
+                src: 'sounds/214854__bash360__crumbling-paper.mp3'
             }
         },
         "policie": {

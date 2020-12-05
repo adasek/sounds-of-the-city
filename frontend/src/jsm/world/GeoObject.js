@@ -79,6 +79,7 @@ var GeoObject = function (geoItem, opts) {
         if (this.opts.audio.src) {
             this.audioElement = document.createElement('audio')
             this.audioElement.src = this.opts.audio.src
+            this.audioElement.loop = true
             this.audioElement.play()
             this.audioTrack = audioContext.createMediaElementSource(this.audioElement);
             this.audioTrack.connect(this.panner).connect(audioContext.destination);

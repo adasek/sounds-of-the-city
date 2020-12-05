@@ -13,9 +13,13 @@ function doPlay(){
     init();
 
     // Vaclavak
-    //geographyLoader = new GeographyLoader( 50.0796064, 14.4300247)
+    let point = { lat:  50.0796064, lon: 14.4300247 }
     // div sarka
-    geographyLoader = new GeographyLoader( 50.0926997, 14.3240239)
+    //let point = { lat:  50.0926997, lon: 14.3240239 }
+
+    geographyLoader = new GeographyLoader( point.lat, point.lon )
+    world.center.lat = point.lat
+    world.center.lon = point.lon
 
     geographyLoader.addEventListener( 'geoDataLoaded', function ( event ) {
         world.updateGeoData(event.geoData, event.center)

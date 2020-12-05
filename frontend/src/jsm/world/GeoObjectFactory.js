@@ -66,6 +66,7 @@ var GeoObjectFactory = function (controls, scene, domElement) {
         let geoObject = new GeoObject(geoItem, this.pointTables[geoItem.table_name])
         geoObject.attachToScene(scene, centerPoint)
         geoObject.attachToAudioModel(audioCtx, centerPoint)
+        return geoObject
     }
 }
 

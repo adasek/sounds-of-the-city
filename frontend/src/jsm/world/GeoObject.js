@@ -5,6 +5,8 @@ import {CylinderBufferGeometry, MeshPhongMaterial} from 'three';
 
 var GeoObject = function (geoItem, opts) {
     this.geoItem = geoItem
+    this.type = this.geoItem.table_name
+    this.id = this.geoItem.objectid
 
     const geometryClasses = {
         CylinderBufferGeometry
@@ -84,6 +86,10 @@ var GeoObject = function (geoItem, opts) {
             this.audioTrack = audioContext.createMediaElementSource(this.audioElement);
             this.audioTrack.connect(this.panner).connect(audioContext.destination);
         }
+    }
+
+    this.hash = function(){
+        return this.type + "_" + this.id
     }
 }
 

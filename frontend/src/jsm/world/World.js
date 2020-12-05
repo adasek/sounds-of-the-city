@@ -19,17 +19,13 @@ var World = function (controls, scene, domElement) {
     this.audioCtx = new AudioContext();
     this.listener = this.audioCtx.listener;
 
-    this.updateGeoData = function (geoData, centerPoint) {
-        this.center.lat = centerPoint.lat
-        this.center.lon = centerPoint.lon
+    this.updateGeoData = function (geoData) {
+        //this.center.lat = centerPoint.lat
+        //this.center.lon = centerPoint.lon
         // update avatar position
-        this.avatar.object.position.x = 0
-        this.avatar.object.position.y = 0
-        this.avatar.object.position.z = 0
-        //delete objects
-        this.audioCtx.close();
-        this.audioCtx = new AudioContext();
-        this.listener = this.audioCtx.listener;
+        //this.avatar.object.position.x = 0
+        //this.avatar.object.position.y = 0
+        //this.avatar.object.position.z = 0
 
         // load new objects
         for (let objectType in geoData) {
@@ -38,8 +34,11 @@ var World = function (controls, scene, domElement) {
                 continue;
             }
             for (let geoItem of geoData[objectType]) {
+                if (geoItem.table_name + "_" + geoItem.objectid in this.objects) {
+                    continue
+                }
                 let newObject = this.geoObjectFactory.build(geoItem, this.center, this.scene, this.audioCtx)
-                if (!newObject) {
+                if (newObject == null) {
                     continue;
                 }
                 if (newObject.hash() in this.objects) {

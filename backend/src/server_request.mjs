@@ -74,7 +74,7 @@ rightBottomCorner(p) as  (SELECT ST_Project('POINT(${lon} ${lat})'::geography::g
     async getTechnicalUsage(lat, lon, distance = 100) {
         let queryString = `
     ${this.withCorners(lat, lon, distance)}
- SELECT ctvuk_kod, ctvuk_popis, ST_AsText(ST_UNION(wkb_geometry)) AS geometry
+ SELECT 'technical_usage' AS table_name, ctvuk_kod, ctvuk_popis, ST_AsText(ST_UNION(wkb_geometry)) AS geometry
  FROM technicke_vyuziti
  WHERE  wkb_geometry 
      &&  ${this.makeEnvelope()}
@@ -90,7 +90,7 @@ rightBottomCorner(p) as  (SELECT ST_Project('POINT(${lon} ${lat})'::geography::g
     async getPointData(table_name, lat, lon, distance){
         let queryString = `
      ${this.withCorners(lat, lon, distance)}
- SELECT *, ST_AsText((wkb_geometry)) AS geometry
+ SELECT '${table_name}' AS table_name, *, ST_AsText((wkb_geometry)) AS geometry
  FROM ${table_name}
  WHERE wkb_geometry 
      && ${this.makeEnvelope()}
@@ -102,7 +102,7 @@ rightBottomCorner(p) as  (SELECT ST_Project('POINT(${lon} ${lat})'::geography::g
     async getFeaturesAround(lat, lon, distance = 100) {
         //
         return {
-            'technical_usage': await this.getTechnicalUsage(lat, lon, distance),
+            /* 'technical_usage': await this.getTechnicalUsage(lat, lon, distance), */
             'pid_stops': await this.getPointData("pid_zastavky", lat, lon, distance),
             'culture_venues': await this.getPointData("kultura_body", lat, lon, distance),
             'trash_wc': await this.getPointData("odpad_wc", lat, lon, distance),

@@ -1,0 +1,192 @@
+div {
+    display: flex;
+    align-items: center;
+}
+
+body {
+    /* background: rgb(2,0,36); */
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    margin:0;
+}
+
+.background {
+    z-index: -99;
+    position: fixed;;
+    margin:0;
+    background: linear-gradient(120deg, rgba(0,255,194,1) 0%, rgba(162,255,233,1) 0%, rgba(255,255,255,1) 56%);
+    width: 100vw;
+    height: 100vh;
+}
+
+.container {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 1; grid-template-rows: 3;
+    grid-template-rows: 100px 30fr auto;
+}
+
+.base {
+    grid-template-columns: 3; grid-template-rows: 1;
+    justify-content: center;
+    height: 300px;
+    display: grid;
+    font-family: 'Roboto', sans-serif;
+    grid-template-columns: 400px 200px 400px;
+    /* grid-template-rows: 500px; */
+}
+
+.about {
+    mix-blend-mode:hard-light;
+    font-family: 'Roboto', sans-serif;
+    padding-top: 6em;
+    font-size: 1.4em;
+}
+
+.about p {
+    width: 100%; text-align: right;
+}
+
+h1 {
+    padding-right: 1em;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    font-size: 3.2em;
+}
+h1 span {
+    mix-blend-mode:hard-light;
+}
+
+.siteName-container {
+    display: grid;
+}
+
+.flyingText {
+    mix-blend-mode:hard-light;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.flyingText.first {
+    grid-column-start: 1;
+}
+
+.flyingText.second {
+    grid-column-start: 3;
+}
+
+.go:hover {
+    color: black;
+    background-color: white;
+    transition: 0.3s;
+
+}
+
+.go {
+    mix-blend-mode:hard-light;
+    color: white;
+    grid-column-start: 2;
+    border:none;
+    background-color: black;
+    padding: 0.2em 1em;
+    font-size: 2.3em;
+    font-family: 'Roboto', sans-serif;
+    animation: animateGo  10s linear infinite;
+}
+
+a {
+    color:cornflowerblue;
+}
+a:visited {
+    color:cornflowerblue;
+}
+
+@media(max-width: 1100px) {
+    h1 { font-size: 3em; margin-top: 0em; text-align: center; }
+    .flyingText {font-size: 1.5em; }
+    .base {height: 600px;
+        grid-template-columns: 1;
+        grid-template-rows: 3;
+        margin-top: 2em;
+        grid-template-rows: 200px 80px 200px;
+        grid-template-columns: 300px;
+    }
+    .flyingText.first { grid-column-start: 1; }
+    .flyingText.second { grid-column-start: 1; }
+    .go { grid-column-start: 1; margin:2em; font-size:1.8em;}
+    .about {padding-top: 0em;}
+    .about p {text-align: center; }
+}
+
+.experience {animation:animateExperience  10s linear infinite;}
+.feel       {animation:animateFeel        20s linear infinite;}
+.listen     {animation:animateListen      24s linear infinite;}
+.walk       {animation:animateWalk        13s linear infinite;}
+.city       {animation:animateCity        12s linear infinite;}
+.Prague     {animation:animatePrague      20s linear infinite;}
+.urban      {animation:animateUrban       12s linear infinite;}
+
+@keyframes animateGo {
+    0% { transform:   scale(1); }
+    25% { transform:  scale(1.2); }
+    50% { transform:  scale(1.1); }
+    75% { transform:  scale(1.2); }
+    100% { transform:  scale(1); }
+}
+
+@keyframes animateExperience {
+    0% { transform:   translateY(0px)  translateX(0px)    rotate(5deg); }
+    25% { transform:  translateY(-2px) translateX(-2px)  rotate(-3deg); }
+    50% { transform:  translateY(1px)  translateX(0px)   rotate(0deg); }
+    75% { transform:  translateY(5px)  translateX(5px)   rotate(-2deg); }
+    100% { transform: translateY(0px)  translateX(0px)   rotate(5deg); }
+}
+
+@keyframes animateFeel {
+    0% { transform:   translateY(-2em)   translateX(0em)    rotate(6deg); }
+    25% { transform:  translateY(-1em)   translateX(0.2em)  rotate(2deg); }
+    50% { transform:  translateY(-1.2em) translateX(1em)   rotate(-1deg); }
+    75% { transform:  translateY(-1em)   translateX(1.1em)   rotate(2deg); }
+    100% { transform: translateY(-2em)   translateX(0em)   rotate(6deg); }
+}
+
+@keyframes animateListen {
+    0% { transform:   translateY(2em)  translateX(0em)    rotate(1deg); }
+    25% { transform:  translateY(2em)  translateX(2em)  rotate(-3deg); }
+    50% { transform:  translateY(3em)  translateX(3em)   rotate(0deg); }
+    75% { transform:  translateY(2em)  translateX(1em)   rotate(2deg); }
+    100% { transform: translateY(2em)  translateX(0em)   rotate(1deg); }
+}
+
+@keyframes animateWalk {
+    0% { transform:   translateY(2em)  translateX(-6em)    rotate(3deg); }
+    25% { transform:  translateY(3em)  translateX(-6.3em)  rotate(-2deg); }
+    50% { transform:  translateY(2em)  translateX(-6em)   rotate(0deg); }
+    75% { transform:  translateY(2.2em)  translateX(-6.6em)   rotate(-2deg); }
+    100% { transform: translateY(2em)  translateX(-6em)   rotate(3deg); }
+}
+
+@keyframes animateCity {
+    0% { transform:   translateY(-1em)  translateX(2em)   rotate(1deg); }
+    25% { transform:  translateY(-1em)  translateX(2.2em)   rotate(3deg); }
+    50% { transform:  translateY(-1.2em)  translateX(2em)   rotate(-2deg); }
+    75% { transform:  translateY(-1em)  translateX(2.2em)   rotate(2deg); }
+    100% { transform: translateY(-1em)  translateX(2em)   rotate(1deg); }
+}
+
+@keyframes animatePrague {
+    0% { transform:   translateY(2em)  translateX(1em)   rotate(-2deg); }
+    25% { transform:  translateY(3em)  translateX(2em)   rotate(3deg); }
+    50% { transform:  translateY(1em)  translateX(1em)   rotate(0deg); }
+    75% { transform:  translateY(1.2em)  translateX(-1em)   rotate(5deg); }
+    100% { transform: translateY(2em)  translateX(1em)   rotate(-2deg); }
+}
+
+@keyframes animateUrban {
+    0% { transform:   translateY(0px)  translateX(1em)   rotate(2deg); }
+    25% { transform:  translateY(4px)  translateX(1.2em)   rotate(4deg); }
+    50% { transform:  translateY(1px)  translateX(1em)   rotate(-3deg); }
+    75% { transform:  translateY(5px)  translateX(0.9em)   rotate(0deg); }
+    100% { transform: translateY(0px)  translateX(1em)   rotate(2deg); }
+}

@@ -32,7 +32,8 @@ module.exports = {
       inject: false,
       template: require('html-webpack-template'),
 
-      headHtmlSnippet: '<style>body {margin: 0}</style>',
+      headHtmlSnippet: '<style>@import "style.css";body {margin: 0}</style>',
+      bodyHtmlSnippet: '<section id="splashScreen"><div class="background"></div><div class="container"><p class="siteName-container"><h1><span>Sound of Prague</span></h1></p>\n<div class="base"><div class="flyingText first"><p class="experience">experience</p><p class="feel">feel</p><p class="listen">listen</p><p class="walk">walk</p></div><button class="go" id="enterButton">enter</button><div class="flyingText second"><p class="city">the City</p><p class="Prague">Prague</p><p class="urban">urban</p></div></div><div class="about"><p><a href=".">About</a> this project.</p></div></div></section>',
       meta: [
         {
           name: 'description',

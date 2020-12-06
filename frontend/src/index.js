@@ -9,7 +9,7 @@ import {OrbitControls} from './jsm/controls/OrbitControls.js';
 let button, camera, controls, scene, renderer, time, listener, geographyLoader, world;
 
 function doPlay(){
-    button.style.display = 'none'
+    document.getElementById('splashScreen').style.display = 'none'
     init();
 
     // Vaclavak
@@ -28,10 +28,8 @@ function doPlay(){
     animate();
 }
 
-button = document.createElement("button")
-button.innerHTML = "Start"
+button = document.getElementById("enterButton")
 button.onclick=doPlay
-document.body.appendChild(button)
 
 
 function init() {

@@ -4,7 +4,7 @@
   "description": "Provider of geospatial data for Sounds of Prague project",
   "main": "main.js",
   "scripts": {
-    "start": "cp -r assets/* ../frontend/dist/* data_sources.json public/; node --experimental-json-modules main.js",
+    "start": "cp -r assets/* ../frontend/dist/* ../frontend/assets/* data_sources.json public/; node --experimental-json-modules main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",

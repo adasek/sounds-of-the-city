@@ -14,16 +14,40 @@
   },
   {
     "type": "geojson",
-    "filename": "DOP_PID_ZASTAVKY_TS_B.json",
+    "filename": "DOP_PID_ZASTAVKY_B.json",
+    "origin": "https://opendata.praha.eu/dataset/zastavky-pid-jednotlive-oznacniky-geodata",
+    "license": "CC-BY",
+    "author": {
+      "name": "Ropid",
+      "website": "https://opendata.praha.eu/organization/about/ropid"
+    },
     "table_name": "pid_stops",
     "gfx": {
       "geometry": {"class": "CylinderBufferGeometry", "params": [0, 10, 30, 4, 1]},
       "material": {"class": "MeshPhongMaterial", "params": [{"color": "#ff0000", "flatShading": true}]}
     },
-    "audio": {
-      "origin": "https://freesound.org/people/Woodylein/sounds/213564/",
-      "src": "213564__woodylein__at-a-bus-stop.mp3"
-    }
+    "audio":
+      [
+        {
+          "match": {"zast_dd": 0},
+          "origin": "https://freesound.org/people/15GPanskaHladikova_Danuse/sounds/461143/",
+          "src": "461143__15gpanskahladikova-danuse__15-metro-line-c-departure.mp3",
+          "license": "CC0"
+        },{
+        "match": {"zast_dd": 4},
+        "origin": "https://freesound.org/people/Woodylein/sounds/213564/",
+        "src": "213564__woodylein__at-a-bus-stop.mp3",
+        "license": "CC0"
+      },{
+        "origin": "https://freesound.org/people/KrystofJakobe/sounds/499130/",
+        "src": "499130__krystofjakobe__tram-arrival.mp3",
+        "license": "CC-BY",
+        "author": {
+          "name": "KrystofJakobe @ freesound.org",
+          "website": "https://freesound.org/people/KrystofJakobe/"
+          }
+        }
+      ]
   },
   {
     "type": "geojson",

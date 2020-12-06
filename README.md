@@ -19,7 +19,7 @@ Thin javascript server (run in Nodejs) that provides client nescessary files to 
 Postgresql with PostGIS extension allows server to search for features around Client avatar effectively.
 
 ## Demo
-Current version should be available at [http://zvukymesta.m42.cz](http://zvukymesta.m42.cz)
+Current version should be available at [http://zvukyprahy.m42.cz/](http://zvukyprahy.m42.cz/)
 
 ## Install & development
 See [INSTALL.md](INSTALL.md) instructions

@@ -1,7 +1,7 @@
 ## Fresh Ubuntu:
 
 #### Install POSTGRES
-Follow [INSTALL-PSQL.md](INSTALL-PSQL.md) instructions
+Follow [INSTALL-POSTGRES.md](INSTALL-POSTGRES.md) instructions
 
 #### Install dependencies
 

@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import * as merge from 'deepmerge';
 import {CylinderBufferGeometry, MeshPhongMaterial} from 'three';
+import {GeographyHelper} from "../helper/Geography";
 
 
 var GeoObject = function (geoItem, opts) {
@@ -104,10 +105,11 @@ var GeoObject = function (geoItem, opts) {
         // Save audioContext for destroying this
         this.audioContext = audioContext
         let point = this.geometryCenter()
+        let localPoint = GeographyHelper.gpsToLocal(point, centerPoint)
         this.panner = new PannerNode(audioContext, merge(this.opts.audio, {
-                positionX: (point.lat - centerPoint.lat) * 100000,
-                positionY: 0,
-                positionZ: (point.lon - centerPoint.lon) * 100000,
+                positionX: localPoint.x,
+                positionY: localPoint.y,
+                positionZ: localPoint.z,
                 orientationX: 0,
                 orientationY: 1,
                 orientationZ: 0

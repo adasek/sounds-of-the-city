@@ -4,6 +4,7 @@ import {
 import {Avatar} from '../avatar/Avatar.js';
 import {GeoObjectFactory} from './GeoObjectFactory.js';
 import {GeographyHelper} from "../helper/Geography";
+import * as THREE from "three";
 
 var World = function (controls, scene, domElement) {
     this.controls = controls
@@ -12,6 +13,7 @@ var World = function (controls, scene, domElement) {
     this.objects = {}
     this.center = {lat: null, lon: null}
     this.geoObjectFactory = new GeoObjectFactory()
+    this.mapTiles = {}
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioCtx = new AudioContext();
@@ -47,6 +49,7 @@ var World = function (controls, scene, domElement) {
                 this.objects[newObject.hash()] = newObject
             }
         }
+
     }
 
     this.logNearest = function () {

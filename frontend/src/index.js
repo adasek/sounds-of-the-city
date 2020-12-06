@@ -60,7 +60,7 @@ function init() {
         world.logNearest()
     },10000)
      */
-    
+
     //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
 
     controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled

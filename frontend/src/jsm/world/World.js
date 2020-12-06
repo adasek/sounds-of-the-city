@@ -1,12 +1,8 @@
 import {
-    EventDispatcher,
-    Vector3
+    EventDispatcher
 } from "three";
 import {Avatar} from '../avatar/Avatar.js';
 import {GeoObjectFactory} from './GeoObjectFactory.js';
-
-
-import * as THREE from "three";
 import {GeographyHelper} from "../helper/Geography";
 
 var World = function (controls, scene, domElement) {
@@ -22,12 +18,6 @@ var World = function (controls, scene, domElement) {
     this.listener = this.audioCtx.listener;
 
     this.updateGeoData = function (geoData) {
-        //this.center.lat = centerPoint.lat
-        //this.center.lon = centerPoint.lon
-        // update avatar position
-        //this.avatar.object.position.x = 0
-        //this.avatar.object.position.y = 0
-        //this.avatar.object.position.z = 0
 
         // cleanup
         for (let key in this.objects) {
@@ -57,8 +47,6 @@ var World = function (controls, scene, domElement) {
                 this.objects[newObject.hash()] = newObject
             }
         }
-
-
     }
 
     this.logNearest = function () {

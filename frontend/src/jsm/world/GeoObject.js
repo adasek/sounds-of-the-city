@@ -134,11 +134,12 @@ var GeoObject = function (geoItem, opts) {
         }
         if (this.opts.audio.src) {
             this.audioElement.pause()
-            //this.audioTrack.disconnect(this.panner);
-            //this.panner.disconnect(this.audioContext.destination)
+            this.audioTrack.disconnect()
+            this.panner.disconnect()
             if(this.audioElement.parentNode){
                 this.audioElement.parentNode.removeChild(this.audioElement);
             }
+            this.audioElement = null
         }
         this.destroyed = true
         this.scene.remove(this.mesh);

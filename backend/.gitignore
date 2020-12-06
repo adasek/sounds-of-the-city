@@ -1,6 +1,7 @@
-import/data/
+import/data/*
 !import/data/.keep
-public/
+public/*
+!public/.keep
 
 ### Node ###
 # Logs

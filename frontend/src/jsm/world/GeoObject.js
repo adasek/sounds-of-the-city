@@ -4,6 +4,9 @@ import {CylinderBufferGeometry, MeshPhongMaterial} from 'three';
 
 
 var GeoObject = function (geoItem, opts) {
+    if(!opts){
+        throw "Opts argument not present"
+    }
     this.geoItem = geoItem
     this.type = this.geoItem.table_name
     this.id = this.geoItem.objectid
@@ -85,7 +88,7 @@ var GeoObject = function (geoItem, opts) {
         )
         if (this.opts.audio.src) {
             this.audioElement = document.createElement('audio')
-            this.audioElement.src = this.opts.audio.src
+            this.audioElement.src = '/sounds/' + this.opts.audio.src
             this.audioElement.loop = true
             this.audioElement.play()
             this.audioTrack = audioContext.createMediaElementSource(this.audioElement);

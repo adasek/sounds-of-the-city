@@ -21,7 +21,7 @@ var GeographyLoader = function ( lat, lon ) {
                 longitude: lon,
                 latitude: lat
             }
-            axios.post('http://localhost:8090/', requestData)
+            axios.post('/', requestData)
                 .then(function (response) {
                     if(response.data.error){ throw response.data.error }
                     this.geoData = response.data

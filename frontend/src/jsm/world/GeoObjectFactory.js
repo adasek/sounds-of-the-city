@@ -3,67 +3,29 @@ import {EventDispatcher} from "three";
 import {World} from "./World";
 import {GeoObject} from "./GeoObject";
 
+const axios = require('axios').default;
+
+
 var GeoObjectFactory = function (controls, scene, domElement) {
-
-    this.pointTables = {
-        "pid_zastavky": {
-            gfx: {
-                geometry: {class: 'CylinderBufferGeometry', params: [0, 10, 30, 4, 1]},
-                material: {class: 'MeshPhongMaterial', params: [{color: 0xff0000, flatShading: true}]}
-            },
-            audio: {src: 'sounds/213564__woodylein__at-a-bus-stop.mp3'}
-        },
-        "kultura_body": {
-            gfx: {
-                geometry: {class: 'CylinderBufferGeometry', params: [5, 10, 30, 5, 1]},
-                material: {class: 'MeshPhongMaterial', params: [{color: 0xffffff, flatShading: true}]}
+    this.pointTable = null
+    axios.get('/data_sources.json', {})
+        .then(function (response) {
+            this.pointTable = {}
+            for (const dataSource of response.data) {
+                this.pointTable[dataSource.table_name] = dataSource
             }
-        },
-        "odpad_wc": {
-            gfx: {
-                geometry: {class: 'CylinderBufferGeometry', params: [5, 5, 30, 5, 1]},
-                material: {class: 'MeshPhongMaterial', params: [{color: 0x666666, flatShading: true}]}
-            }
-        },
-        "odpad_tridene_kontejnery": {
-            gfx: {
-                geometry: {class: 'CylinderBufferGeometry', params: [10, 10, 30, 5, 1]},
-                material: {class: 'MeshPhongMaterial', params: [{color: 0x666666, flatShading: true}]}
-            },
-            audio: {
-                src: 'sounds/214854__bash360__crumbling-paper.mp3'
-            }
-        },
-        "odpad_sber": {
-            gfx: {
-                geometry: {class: 'CylinderBufferGeometry', params: [5, 10, 30, 5, 1]},
-                material: {class: 'MeshPhongMaterial', params: [{color: 0x666666, flatShading: true}]}
-            },
-            audio: {
-                src: 'sounds/214854__bash360__crumbling-paper.mp3'
-            }
-        },
-        "policie": {
-            gfx: {
-                geometry: {class: 'CylinderBufferGeometry', params: [10, 5, 30, 10, 1]},
-                material: {class: 'MeshPhongMaterial', params: [{color: 0x0000ff, flatShading: true}]}
-            }
-        },
-        "priroda_pamatne_stromy": {
-            gfx: {
-                geometry: {class: 'CylinderBufferGeometry', params: [10, 5, 30, 12, 1]},
-                material: {class: 'MeshPhongMaterial', params: [{color: 0x00ff00, flatShading: true}]}
-            }
-        }
-    }
-
+        }.bind(this))
+        .catch(function (error) {
+            console.error(error);
+            throw error
+        });
 
     this.build = function (geoItem, centerPoint, scene, audioCtx) {
-        if (geoItem.tableName == 'technical_usage') {
+        if (!this.pointTable || !(geoItem.table_name in this.pointTable)) {
             return null
         }
 
-        let geoObject = new GeoObject(geoItem, this.pointTables[geoItem.table_name])
+        let geoObject = new GeoObject(geoItem, this.pointTable[geoItem.table_name])
         geoObject.attachToScene(scene, centerPoint)
         geoObject.attachToAudioModel(audioCtx, centerPoint)
         return geoObject

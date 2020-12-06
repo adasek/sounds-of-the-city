@@ -1,5 +1,6 @@
-export default class ServerRequest {
+import dataSources from '../data_sources.json'
 
+export default class ServerRequest {
     constructor(server, req, res) {
         this.server = server;
 
@@ -47,7 +48,7 @@ export default class ServerRequest {
             // distance in meters
             distance = parseInt(requestBody['distance']);
         }
-        if(!distance || distance > 200){
+        if (!distance || distance > 200) {
             distance = 200
         }
         return this.getFeaturesAround(lat, lon, distance)
@@ -87,7 +88,7 @@ rightBottomCorner(p) as  (SELECT ST_Project('POINT(${lon} ${lat})'::geography::g
     /*
     Work with spatial data that have point geometry
      */
-    async getPointData(table_name, lat, lon, distance){
+    async getPointData(table_name, lat, lon, distance) {
         let queryString = `
      ${this.withCorners(lat, lon, distance)}
  SELECT '${table_name}' AS table_name, *, ST_AsText((wkb_geometry)) AS geometry
@@ -100,17 +101,11 @@ rightBottomCorner(p) as  (SELECT ST_Project('POINT(${lon} ${lat})'::geography::g
     }
 
     async getFeaturesAround(lat, lon, distance = 100) {
-        //
-        return {
-            /* 'technical_usage': await this.getTechnicalUsage(lat, lon, distance), */
-            'pid_stops': await this.getPointData("pid_zastavky", lat, lon, distance),
-            'culture_venues': await this.getPointData("kultura_body", lat, lon, distance),
-            'trash_wc': await this.getPointData("odpad_wc", lat, lon, distance),
-            'trash_containers': await this.getPointData("odpad_tridene_kontejnery", lat, lon, distance),
-            'trash_centers': await this.getPointData("odpad_sber", lat, lon, distance),
-            'police': await this.getPointData("policie", lat, lon, distance),
-            'nature_memorial_trees': await this.getPointData("priroda_pamatne_stromy", lat, lon, distance)
+        let allFeatures = {}
+        for (const dataSource of dataSources) {
+            allFeatures[dataSource['table_name']] = await this.getPointData(dataSource['table_name'], lat, lon, distance)
         }
+        return allFeatures
     }
 
 };

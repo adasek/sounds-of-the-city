@@ -1,3 +1,7 @@
+import/data/
+!import/data/.keep
+public/
+
 ### Node ###
 # Logs
 logs

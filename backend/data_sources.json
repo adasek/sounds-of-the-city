@@ -1,0 +1,41 @@
+[
+  {
+    "type": "geojson",
+    "filename": "FSV_Kultura_b.json",
+    "table_name": "culture_venues",
+    "gfx": {
+      "geometry": {"class": "CylinderBufferGeometry", "params": [5, 10, 30, 5, 1]},
+      "material": {"class": "MeshPhongMaterial", "params": [{"color": "#00ff00", "flatShading": true}]}
+    },
+    "audio": {
+      "origin": "https://musopen.org/music/6201-music-for-the-royal-fireworks-hwv-351/",
+      "src": "Music+for+the+Royal+Fireworks,+HWV+351+-+Part+1.mp3"
+    }
+  },
+  {
+    "type": "geojson",
+    "filename": "DOP_PID_ZASTAVKY_TS_B.json",
+    "table_name": "pid_stops",
+    "gfx": {
+      "geometry": {"class": "CylinderBufferGeometry", "params": [0, 10, 30, 4, 1]},
+      "material": {"class": "MeshPhongMaterial", "params": [{"color": "#ff0000", "flatShading": true}]}
+    },
+    "audio": {
+      "origin": "https://freesound.org/people/Woodylein/sounds/213564/",
+      "src": "213564__woodylein__at-a-bus-stop.mp3"
+    }
+  },
+  {
+    "type": "geojson",
+    "filename": "ZPK_O_Kont_TOstan_b.json",
+    "table_name": "trash_containers",
+    "gfx": {
+      "geometry": {"class": "CylinderBufferGeometry", "params": [0, 10, 30, 4, 1]},
+      "material": {"class": "MeshPhongMaterial", "params": [{"color": "#000066", "flatShading": true}]}
+    },
+    "audio": {
+      "origin": "https://freesound.org/people/Bash360/sounds/214854/",
+      "src": "214854__bash360__crumbling-paper.mp3"
+    }
+  }
+]

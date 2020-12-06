@@ -19,9 +19,8 @@ var GeoObject = function (geoItem, opts) {
     };
     const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray
 
-    // Default values
-    this.opts = {
-        audio: {
+    this.defaultAudioProperties = function () {
+        return {
             'pannerModel': 'HRTF',
             'innerCone ': 360,
             'outerCone': 360,
@@ -30,7 +29,12 @@ var GeoObject = function (geoItem, opts) {
             'maxDistance': 0.1,
             'refDistance': 1,
             'rolloffFactor': 1,
-        },
+        }
+    }
+
+    // Default values
+    this.opts = {
+        audio: this.defaultAudioProperties(),
         gfx: {
             geometry: {class: 'CylinderBufferGeometry', params: [5, 5, 30, 5, 1]},
             material: {class: 'MeshPhongMaterial', params: [{color: 0x666666, flatShading: true}]}
@@ -38,6 +42,29 @@ var GeoObject = function (geoItem, opts) {
     }
     this.opts = merge(this.opts, opts, { arrayMerge: overwriteMerge })
 
+
+    this.audioInfo = function () {
+        if (Array.isArray(this.opts.audio)) {
+            // determine based on filter
+            for (const audioPossibility of this.opts.audio) {
+                if (!('match' in audioPossibility) || this.matches(this.geoItem, audioPossibility['match'])) {
+                    return merge(audioPossibility, this.defaultAudioProperties())
+                }
+            }
+            throw "No match found"
+        } else {
+            return this.opts.audio
+        }
+    }
+
+    this.matches = function(haystack, needle){
+        for (const key in needle){
+            if (!(key in haystack) || haystack[key] != needle[key]){
+                return false
+            }
+        }
+        return true
+    }
 
     this.parseGeometry = function (geometry) {
         //input: POINT(14.322079278 50.0925608060001)
@@ -86,12 +113,13 @@ var GeoObject = function (geoItem, opts) {
                 orientationZ: 0
             })
         )
-        if (this.opts.audio.src) {
+        if (this.audioInfo().src) {
             this.audioElement = document.createElement('audio')
-            this.audioElement.src = '/sounds/' + this.opts.audio.src
+            this.audioElement.src = '/sounds/' + this.audioInfo().src
             this.audioElement.loop = true
             this.audioElement.play()
             this.audioTrack = audioContext.createMediaElementSource(this.audioElement);
+            //this.audioTrack is of type MediaElementAudioSourceNode - AudioNode that has one output
             this.audioTrack.connect(this.panner).connect(audioContext.destination);
         }
     }

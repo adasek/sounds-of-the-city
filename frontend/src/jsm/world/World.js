@@ -31,9 +31,9 @@ var World = function (controls, scene, domElement) {
 
         // cleanup
         for (let key in this.objects) {
-            if(GeographyHelper.calculateDistance(this.avatar.getGPSPosition(this.center), this.objects[key].geometryCenter() ) > 0.3 ) {
+            if (GeographyHelper.calculateDistance(this.avatar.getGPSPosition(this.center), this.objects[key].geometryCenter()) > 0.3) {
                 this.objects[key].destroy()
-                delete(this.objects[key])
+                delete (this.objects[key])
             }
         }
 
@@ -59,6 +59,23 @@ var World = function (controls, scene, domElement) {
         }
 
 
+    }
+
+    this.logNearest = function () {
+        let objectsSorted = [...Object.values(scope.objects)]
+        var avatar = scope.avatar
+        var center = scope.center
+        objectsSorted.sort(function (a, b) {
+            const distA = GeographyHelper.calculateDistance(avatar.getGPSPosition(center), a.geometryCenter())
+            const distB = GeographyHelper.calculateDistance(avatar.getGPSPosition(center), b.geometryCenter())
+            return distA - distB
+        })
+        for (let i = 0; i < 3; i++) {
+            const dist = GeographyHelper.calculateDistance(avatar.getGPSPosition(center), objectsSorted[i].geometryCenter())
+
+            console.log("Distance " + dist + ":")
+            console.log(objectsSorted[i])
+        }
     }
 
     this.update = function () {

@@ -50,6 +50,41 @@ var World = function (controls, scene, domElement) {
             }
         }
 
+        // Load osm tiles
+        let tileX = GeographyHelper.lon2tile(this.avatar.getGPSPosition(this.center).lon, 16)
+        let tileY = GeographyHelper.lat2tile(this.avatar.getGPSPosition(this.center).lat, 16)
+
+        let tileImage = `https://a.tile.openstreetmap.org/16/${tileX}/${tileY}.png`
+        if (!(tileImage in this.mapTiles)) {
+            // count the tileImage position
+            let leftTop = {lon: GeographyHelper.tile2lon(tileX, 16), lat: GeographyHelper.tile2lat(tileY, 16)}
+            let rightBottom = {
+                lon: GeographyHelper.tile2lon(tileX + 1, 16),
+                lat: GeographyHelper.tile2lat(tileY + 1, 16)
+            }
+
+            const leftTopLocal = GeographyHelper.gpsToLocal(leftTop, this.center)
+            const rightBottomLocal = GeographyHelper.gpsToLocal(rightBottom, this.center)
+            const texture = new THREE.TextureLoader().load(tileImage);
+            const material = new THREE.MeshBasicMaterial({map: texture});
+            const geometry = new THREE.PlaneGeometry(Math.abs(rightBottomLocal.z - leftTopLocal.z), Math.abs(rightBottomLocal.x - leftTopLocal.x));
+            let plane = new THREE.Mesh(geometry, material);
+
+            plane.rotateOnWorldAxis ( new THREE.Vector3(1,0,0), 3*Math.PI/2 )
+            plane.rotateOnWorldAxis ( new THREE.Vector3(0,1,0), 3*Math.PI/2 )
+
+            const moveInGlobal = new THREE.Vector3(
+                    (leftTopLocal.x + rightBottomLocal.x) / 2,
+                    0,
+                    (leftTopLocal.z + rightBottomLocal.z) / 2
+                )
+            const moveInLocal = plane.worldToLocal(moveInGlobal)
+            plane.translateX(moveInLocal.z)
+            plane.translateY(moveInLocal.x)
+            this.scene.add(plane)
+
+            this.mapTiles[tileImage] = true
+        }
     }
 
     this.logNearest = function () {

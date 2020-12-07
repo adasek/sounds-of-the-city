@@ -4,7 +4,7 @@ Acquiring geo features around given location
 */
 import { EventDispatcher } from "three";
 import { GeographyHelper } from "../helper/Geography.js";
-
+import  * as config from '/config.json'
 const axios = require('axios').default;
 
 var GeographyLoader = function ( lat, lon ) {
@@ -21,7 +21,8 @@ var GeographyLoader = function ( lat, lon ) {
                 longitude: lon,
                 latitude: lat
             }
-            axios.post('/', requestData)
+
+            axios.post(config.BACKEND_URL, requestData)
                 .then(function (response) {
                     if(response.data.error){ throw response.data.error }
                     this.geoData = response.data

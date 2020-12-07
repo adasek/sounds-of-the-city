@@ -2,6 +2,7 @@ import * as THREE from "three";
 import * as merge from 'deepmerge';
 import {CylinderBufferGeometry, MeshPhongMaterial} from 'three';
 import {GeographyHelper} from "../helper/Geography";
+import  * as config from '/config.json'
 
 
 var GeoObject = function (geoItem, opts) {
@@ -117,7 +118,8 @@ var GeoObject = function (geoItem, opts) {
         )
         if (this.audioInfo().src) {
             this.audioElement = document.createElement('audio')
-            this.audioElement.src = '/sounds/' + this.audioInfo().src
+            this.audioElement.crossOrigin = "anonymous";
+            this.audioElement.src = config.BACKEND_URL + '/sounds/' + this.audioInfo().src
             this.audioElement.loop = true
             this.audioElement.play()
             this.audioTrack = audioContext.createMediaElementSource(this.audioElement);

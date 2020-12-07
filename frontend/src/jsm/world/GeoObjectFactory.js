@@ -2,13 +2,14 @@ import * as THREE from "three";
 import {EventDispatcher} from "three";
 import {World} from "./World";
 import {GeoObject} from "./GeoObject";
+import  * as config from '/config.json'
 
 const axios = require('axios').default;
 
 
 var GeoObjectFactory = function (controls, scene, domElement) {
     this.pointTable = null
-    axios.get('/data_sources.json', {})
+    axios.get(config.BACKEND_URL + '/data_sources.json', {})
         .then(function (response) {
             this.pointTable = {}
             for (const dataSource of response.data) {
